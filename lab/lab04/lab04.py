@@ -7,8 +7,7 @@ def divide(quotients: list[int], divisors: list[int]) -> dict[int, list[int]]:
     >>> divide(list(range(1, 5)), list(range(20, 25)))
     {1: [20, 21, 22, 23, 24], 2: [20, 22, 24], 3: [21, 24], 4: [20, 24]}
     """
-    return {____: ____ for ____ in ____}
-
+    return {j:[i for i in divisors if i%j==0]  for j in quotients}
 
 def buy(fruits_to_buy: list[str], prices: dict[str, int], total_amount: int) -> None:
     """Print ways to buy some of each fruit so that the sum of prices is amount.
