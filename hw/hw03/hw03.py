@@ -25,6 +25,11 @@ def num_eights(num):
     True
     """
     "*** YOUR CODE HERE ***"
+    if num==8:
+        return 1
+    if num<10:
+        return 0
+    return num_eights(num//10)+num_eights(num%10)
 
 
 def digit_distance(num):
@@ -47,6 +52,19 @@ def digit_distance(num):
     True
     """
     "*** YOUR CODE HERE ***"
+    # if num>=10 and num<100:
+    #     if num%10>num//10:
+    #         return num%10-num//10
+    #     else:
+    #         return num//10-num%10
+    # if num<10:
+    #     return 0
+    # return digit_distance(num//10)+digit_distance(num%100)
+# 这样写不对，因为num%103时，出现03，结果返回了0
+    if num < 10:
+        return 0
+    return abs(num % 10 - (num // 10) % 10) + digit_distance(num // 10)
+
 
 
 def interleaved_sum(num, f_odd, f_even):
@@ -71,6 +89,23 @@ def interleaved_sum(num, f_odd, f_even):
     True
     """
     "*** YOUR CODE HERE ***"
+
+#     if num<=0:
+#         return 0
+#     if num%2==0:
+#         return f_even(num)+interleaved_sum(num-1,f_odd,f_even)
+#     elif num%2==1:
+#         return f_odd(num)+interleaved_sum(num-1,f_odd,f_even)
+#     return 
+# 正确但是不能使用%
+
+    def a(i,f1,f2):
+        if i<=num:
+            return f1(i)+a(i+1,f2,f1)
+        else:
+            return 0
+    return a(1,f_odd,f_even) 
+
 
 
 def next_smaller_dollar(bill):
@@ -107,7 +142,13 @@ def count_dollars(sum_needed):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def a(count,bill):
+        if count ==0:
+            return 1
+        elif count <0 or bill==None:
+            return 0       
+        return a(count-bill,bill)+a(count,next_smaller_dollar(bill))
+    return a(sum_needed,100)
 
 def next_larger_dollar(bill):
     """Returns the next larger bill in order."""
@@ -143,6 +184,13 @@ def count_dollars_upward(sum_needed):
     True
     """
     "*** YOUR CODE HERE ***"
+    def a(count,bill):
+        if count ==0:
+            return 1
+        elif count <0 or bill==None:
+            return 0
+        return a(count-bill,bill)+a(count,next_larger_dollar(bill))
+    return a(sum_needed,1)
 
 
 def print_move(origin, destination):
@@ -178,7 +226,12 @@ def move_stack(num, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
-
+    if num==0:
+        return 
+    help=6-start-end
+    move_stack(num-1,start,help)
+    print_move(start,end)
+    move_stack(num-1,help,end)
 
 from operator import sub, mul
 
@@ -193,5 +246,10 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
-
+    return (lambda f: f(f))(lambda f: lambda n: 1 if n == 1 else mul(n, f(f)(sub(n, 1))))
+    # def a(num):
+    #     if num<1:
+    #         return 1
+    #     else:
+    #         return mul(num,a(sub(num,1)))
+    # return a
