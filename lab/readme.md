@@ -1,5 +1,14 @@
 
 #cs61a学习记录
+
+目前写完lab05,hw03
+projects,没写
+
+
+
+
+
+
 python ok -q 函数 --local
 测试代码
 python ok  -u --local
@@ -20,5 +29,11 @@ git pull <remote-name> <branch-name>
 标签管理：git tag命令用于创建、查看和删除标签。 git tag -a <tag-name> -m "tag message" git show <tag-name> git tag -d <tag-name>
 
 
-目前写完lab03,hw03
-projects,没写
+
+
+
+网络问题
+PS C:\Users\86193\Desktop\新建文件夹\cs61a> git push
+fatal: unable to access 'https://github.com/zz20030909/cs61a.git/': Recv failure: Connection was reset
+解决方法？
+修改上传代理，使用代理上传

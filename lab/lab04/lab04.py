@@ -28,10 +28,11 @@ def buy(fruits_to_buy: list[str], prices: dict[str, int], total_amount: int) -> 
             print(cart)
         elif fruits and amount > 0:
             fruit = fruits[0]
-            price = ____
-            for k in ____:
+            price = prices[fruit]#注意这里是prices的字典，需要使用的是prices字典，使用其中的水果来充当索引
+            for k in range(1,amount//price+1):
+                old_amount=amount-price*k
                 # Hint: The display function will help you add fruit to the cart.
-                add(____, ____, ____)
+                add(fruits[1:],old_amount,cart+display(fruit,k))
     add(fruits_to_buy, total_amount, '')
 
 
@@ -69,6 +70,15 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    lat_diff = get_lat(city_a) - get_lat(city_b)
+    lon_diff = get_lon(city_a) - get_lon(city_b)
+    
+    # 使用 ** 2 表示平方
+    return sqrt(lat_diff**2 + lon_diff**2)
+
+
+
+
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -86,6 +96,11 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    a=make_city('a',lat,lon)
+    if distance(a,city_a)<distance(a,city_b):
+        return get_name(city_a)
+    else:
+        return get_name(city_b)
 
 def check_city_abstraction():
     """
