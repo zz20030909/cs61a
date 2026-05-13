@@ -1,10 +1,12 @@
 
 #cs61a学习记录
 
-目前写完lab05,hw03
-projects,没写
+目前写完lab05,hw03,projects hog
 
 
+def a(b=0):
+    b=b+1
+    return b
 
 
 

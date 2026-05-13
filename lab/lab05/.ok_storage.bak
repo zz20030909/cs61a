@@ -4,3 +4,4 @@
 'count_occurrences-correct', (1536, 66)
 'pathsum-correct', (2048, 66)
 'sum_tree-correct', (2560, 66)
+'balanced-correct', (3072, 66)

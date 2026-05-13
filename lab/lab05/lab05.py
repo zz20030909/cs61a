@@ -172,8 +172,12 @@ def balanced(t):
     False
     """
     "*** YOUR CODE HERE ***"
-#完全不会，这是什么东西
-    
+    if is_leaf(t):
+        return True
+    next_root_sum=[sum_tree(i) for i in branches(t)]
+    fi_root_sum=all( i == next_root_sum[0] for i in next_root_sum)
+    next_root_sum2=all(balanced(i) for i in branches(t))
+    return fi_root_sum and next_root_sum2
 
 
     
