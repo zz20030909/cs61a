@@ -1,7 +1,7 @@
 
 #cs61a学习记录
 
-目前写完lab05,hw03,projects hog
+目前写完lab05,hw03,projects cat
 
 
 def a(b=0):
@@ -14,6 +14,7 @@ def a(b=0):
 python ok -q 函数 --local
 测试代码
 python ok  -u --local
+python ok --score --local
 本地测试题目
 git使用
 git add .

@@ -39,6 +39,17 @@ def pick(paragraphs: list[str], select, k: int) -> str:
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
+    i=0
+    while k>=0 and i<len(paragraphs):
+        if select(paragraphs[i]):
+            if k==0:
+                return paragraphs[i]
+            else:
+                k=k-1
+                i=i+1
+        else:
+            i=i+1
+    return ''
 
 
 def about(keywords: list[str]):
@@ -55,7 +66,17 @@ def about(keywords: list[str]):
     'Nice pup.'
     """
     assert all([lower(x) == x for x in keywords]), "keywords should be lowercase."
-
+    def help(k):
+        remove_p=remove_punctuation(k)
+        remove_L=lower(remove_p)
+        remove_w=split(remove_L)
+        for i in keywords:
+            for j in remove_w:
+                if i==j:
+                    return True
+                
+        return False
+    return help
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
     # END PROBLEM 2
@@ -84,9 +105,31 @@ def accuracy(entered: str, source: str) -> float:
     >>> accuracy('', '')
     100.0
     """
+    # entered_words = split(entered)
+    # source_words = split(source)
+    # i=0
+    # flag=0
+    # if len(source_words)==0  and len(entered_words)==0:
+    #     return 100.0
+    # if len(source_words)==0 or len(entered_words)==0:
+    #     return 0.0
+    # while i<len(entered_words) and i<len(source_words):
+    #     if entered_words[i]==source_words[i]:
+    #         flag=flag+1
+    #     i=i+1
+    # return flag/len(entered_words)*100
+    # BEGIN PROBLEM 3
     entered_words = split(entered)
     source_words = split(source)
-    # BEGIN PROBLEM 3
+    flag=0
+    if len(source_words)==0  and len(entered_words)==0:
+        return 100.0
+    if len(source_words)==0 or len(entered_words)==0:
+        return 0.0
+    for a,b in zip(entered_words,source_words):
+        if a==b:
+            flag=flag+1
+    return flag/len(entered_words)*100
     "*** YOUR CODE HERE ***"
     # END PROBLEM 3
 
@@ -107,7 +150,7 @@ def wpm(entered: str, elapsed: int) -> float:
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
     # END PROBLEM 4
-
+    return len(entered)/5*60/elapsed
 
 ################
 # Phase 4 (EC) #
@@ -136,6 +179,7 @@ def memo_diff(diff_function):
     def memoized(entered, source, limit):
         # BEGIN PROBLEM EC
         "*** YOUR CODE HERE ***"
+
         # END PROBLEM EC
 
     return memoized
@@ -151,7 +195,6 @@ def autocorrect(entered_word: str, word_list: list[str], diff_function, limit: i
     from ENTERED_WORD based on DIFF_FUNCTION. If multiple words are tied for the smallest difference,
     return the one that appears closest to the front of WORD_LIST. If the
     lowest difference is greater than LIMIT, return ENTERED_WORD instead.
-
     Arguments:
         entered_word: a string representing a word that may contain typos
         word_list: a list of strings representing source words
@@ -167,6 +210,21 @@ def autocorrect(entered_word: str, word_list: list[str], diff_function, limit: i
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    if entered_word in word_list:
+        return entered_word
+    diff=[]
+    for i in word_list:
+        diff.append(diff_function(entered_word,i,limit))
+    x=diff[0]
+    flag=0
+    for i in range(len(diff)):
+        if diff[i]<x:
+            x=diff[i]
+            flag=i
+    if x<=limit:
+        return word_list[flag]
+    else:
+        return  entered_word
     # END PROBLEM 5
 
 
@@ -193,8 +251,23 @@ def furry_fixes(entered: str, source: str, limit: int) -> int:
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
-    # END PROBLEM 6
+
+    # flag=0
+    # for i in range(min(len(entered),len(source))):
+    #     if entered[i]!=source[i]:
+    #         flag=flag+1
+    #     if flag>limit:
+    #         return flag
+    # return flag+abs(len(entered)-len(source))//不能使用循环
+    if entered=="" or source=="":
+        return len(entered)+len(source)
+    if limit<0:
+        return 0
+    if entered[0]!=source[0] :
+        return 1+ furry_fixes(entered[1:],source[1:],limit-1)
+
+    return furry_fixes(entered[1:],source[1:],limit)
+     # END PROBLEM 6
 
 
 def minimum_mewtations(entered: str, source: str, limit: int) -> int:
@@ -214,21 +287,28 @@ def minimum_mewtations(entered: str, source: str, limit: int) -> int:
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
+
+    if limit<0:
+        return 0
+        # Base cases should go here, you may add more base cases as needed.
         # BEGIN
         "*** YOUR CODE HERE ***"
         # END
     # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
+    if len(entered)==0 or len(source)==0:
+        return abs(len(entered)-len(source))
+    if entered[0]==source[0]:
+        return minimum_mewtations(entered[1:], source[1:], limit)
+        # Feel free to remove or add additional cases
         # BEGIN
         "*** YOUR CODE HERE ***"
         # END
     else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
+        add =  1+minimum_mewtations(entered, source[1:], limit-1) # Fill in these lines
+        remove = 1+minimum_mewtations(entered[1:], source[1:], limit-1)
+        substitute = 1+minimum_mewtations(entered[1:], source, limit-1)
+        return min(add,remove,substitute)
+        # BEGIN这里的含义就是每一条路径遍历后然后取其路径的最小值，完全的暴力，虽然写的很优雅
         "*** YOUR CODE HERE ***"
         # END
 
@@ -274,9 +354,19 @@ def report_progress(entered: list[str], source: list[str], user_id: int, upload)
     ID: 3 Progress: 0.2
     0.2
     """
+    #这个第一个不同就要算
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
     # END PROBLEM 8
+    user_progress=0
+    for i in range(len(entered)):
+        if entered[i]==source[i]:
+            user_progress=user_progress+1
+        else:
+            break
+    upload({'id':user_id,'progress':user_progress/len(source)})
+    return user_progress/len(source)
+    
 
 
 def time_per_word(words: list[str], timestamps_per_player: list[list[int]]) -> dict:
@@ -298,8 +388,13 @@ def time_per_word(words: list[str], timestamps_per_player: list[list[int]]) -> d
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     ts_by_player = timestamps_per_player  # A shorter name (for convenience)
+    times=[]
+    for i in range(len(ts_by_player)):
+        times.append([])
+        for j in range(len(ts_by_player[0])-1):
+            times[i].append(ts_by_player[i][j+1]-ts_by_player[i][j])
     # BEGIN PROBLEM 9
-    times = []  # You may remove this line
+    # You may remove this line
     # END PROBLEM 9
     return {'words': words, 'times': times}
 
@@ -329,6 +424,17 @@ def fastest_words(words_and_times: dict) -> list[list[str]]:
     # BEGIN PROBLEM 10
     "*** YOUR CODE HERE ***"
     # END PROBLEM 10
+
+    c = [[] for _ in pl_idxs]
+    for j in w_idxs:
+        flag=times[0][j]
+        use=0
+        for i in pl_idxs:
+            if flag>times[i][j]:
+                flag=times[i][j]
+                use=i
+        c[use].append(words[j])
+    return c
 
 
 def check_words_and_times(words_and_times):
