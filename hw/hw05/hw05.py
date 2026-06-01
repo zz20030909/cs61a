@@ -10,6 +10,24 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    # yield n
+    # if n==1:
+    #     yield from hailstone(1)
+    # if n%2==0:
+    #     yield from hailstone(n//2)  
+    # else:
+    #     yield from hailstone(n*3+1)
+#for x in hailstone(n // 2):
+#    yield x
+    while n>1:            
+        yield n       
+        if n % 2 == 0:
+            n = n // 2
+        else:
+            n = n * 3 + 1
+            
+    while True:
+        yield 1
 
 
 def merge(a, b):
@@ -31,10 +49,18 @@ def merge(a, b):
     while True:
         if a_val == b_val:
             "*** YOUR CODE HERE ***"
+            yield a_val
+            a_val=next(a)
+            b_val=next(b)
         elif a_val < b_val:
             "*** YOUR CODE HERE ***"
+            yield a_val
+            a_val=next(a)
         else:
             "*** YOUR CODE HERE ***"
+            yield b_val
+            b_val=next(b)
+##这我也想不到，为什么这是要干什么
 
 
 def stair_ways(n):
@@ -51,7 +77,23 @@ def stair_ways(n):
     []
     """
     "*** YOUR CODE HERE ***"
-
+    if n == 0:
+        yield []  # 走到地面了，返回一个空路径代表成功到达
+        return
+    
+    # 情况 A：第一步走 1 阶
+    if n >= 1:
+        # 去管下级递归要 剩下 n-1 阶的所有走法
+        for ways in stair_ways(n - 1):
+            yield [1] + ways  # 把当前的 1 拼在最前面，然后吐出去
+            
+    # 情况 B：第一步走 2 阶
+    if n >= 2:
+        # 去管下级递归要 剩下 n-2 阶的所有走法
+        for ways in stair_ways(n - 2):
+            yield [2] + ways  # 把当前的 2 拼在最前面，然后吐出去
+##想不到，这完全想不到
+##这到底要干什么，能干什么
 
 def yield_paths(t, target):
     """
@@ -89,11 +131,11 @@ def yield_paths(t, target):
     [[0, 2], [0, 2, 1, 2]]
     """
     if label(t) == target:
-        yield ____
+        yield [label(t)]
     for b in branches(t):
-        for ____ in ____:
-            yield ____
-
+        for c in yield_paths(b,target):
+            yield [label(t)]+c
+##太抽象了，太逆天了
 
 
 # Tree Data Abstraction
