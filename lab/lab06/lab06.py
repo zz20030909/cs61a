@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 
-class Transaction:
+class Transaction:#这里是记账和打印，每次变化，记录一次
     def __init__(self, id: int, before: int, after: int):
         self.id = id
         self.before = before
@@ -10,6 +10,11 @@ class Transaction:
     def changed(self) -> bool:
         """Return whether the transaction resulted in a changed balance."""
         "*** YOUR CODE HERE ***"
+        if self.before!=self.after:
+            return True
+        else:
+            return False
+    
 
     def report(self) -> str:
         """Return a string describing the transaction.
@@ -24,9 +29,13 @@ class Transaction:
         msg: str = 'no change'
         if self.changed():
             "*** YOUR CODE HERE ***"
+            if self.before>self.after:
+                msg='decreased '+str(self.before) +'->' +str(self.after)
+            else:
+                msg='increased '+str(self.before) +'->' +str(self.after)
         return str(self.id) + ': ' + msg
 
-class BankAccount:
+class BankAccount:#这是银行账单，记录每一个人的银行账单，然后账单上有东西
     """A bank account that tracks its transaction history.
 
     >>> a = BankAccount('Eric')
@@ -64,17 +73,21 @@ class BankAccount:
     2: no change
     3: decreased 40->10
     """
+    
 
     # *** YOU NEED TO MAKE CHANGES IN SEVERAL PLACES IN THIS CLASS ***
 
     def __init__(self, account_holder: str):
         self.balance: int = 0
         self.holder = account_holder
-
+        self.transactions: list[Transaction]=[]
+        #这里是将这个进行固化，记录每一个账单变动的过程
     def deposit(self, amount: int) -> int:
         """Increase the account balance by amount, add the deposit
         to the transaction history, and return the new balance.
         """
+        trans=Transaction(len(self.transactions),self.balance,self.balance+amount)
+        self.transactions.append(trans)
         self.balance = self.balance + amount
         return self.balance
 
@@ -83,12 +96,17 @@ class BankAccount:
         to the transaction history, and return the new balance.
         """
         if amount > self.balance:
+            trans=Transaction(len(self.transactions),self.balance,self.balance)
+            self.transactions.append(trans)
             return 'Insufficient funds'
+        
+        trans=Transaction(len(self.transactions),self.balance,self.balance-amount)
+        self.transactions.append(trans)
         self.balance = self.balance - amount
         return self.balance
 
 
-class Email:
+class Email:#这是邮件，直接定义了邮件格式
     """An email has the following instance attributes:
 
         msg (str): the contents of the message
@@ -100,7 +118,7 @@ class Email:
         self.sender = sender
         self.recipient_name = recipient_name
 
-class Server:
+class Server:#这是服务器，上面有很多客户端，可注册，和发送邮件到客户端（就是存储起来）
     """Each Server has one instance attribute called clients that is a
     dictionary from client names to client objects.
 
@@ -141,16 +159,16 @@ class Server:
         """Append the email to the inbox of the client it is addressed to.
             email is an instance of the Email class.
         """
-        ____.inbox.append(email)
+        self.clients[email.recipient_name].inbox.append(email)
 
     def register_client(self, client):
         """Add a client to the clients mapping (which is a 
         dictionary from client names to client instances).
             client is an instance of the Client class.
         """
-        ____[____] = ____
+        self.clients[client.name] = client
 
-class Client:
+class Client:#这是客户端，上面有邮件列表，什么服务器上，客户名称，还有自我注册到serve
     """A client has a server, a name (str), and an inbox (list).
 
     >>> s = Server()
@@ -171,13 +189,13 @@ class Client:
         self.inbox: list = []
         self.server = server
         self.name = name
-        server.register_client(____)
+        server.register_client(self)
 
     def compose(self, message: str, recipient_name: str):
         """Send an email with the given message to the recipient."""
-        email = Email(message, ____, ____)
+        
+        email = Email(message, self, recipient_name)
         self.server.send(email)
-
 
 class Mint:
     """A mint creates coins by stamping on years.
@@ -211,13 +229,17 @@ class Mint:
     present_year = 2025
 
     def __init__(self):
+        self.year: int = 2025
         self.update()
 
     def create(self, coin):
         "*** YOUR CODE HERE ***"
+        return coin(self.year)
 
     def update(self) -> None:
+        self.year=self.present_year
         "*** YOUR CODE HERE ***"
+
 
 class Coin:
     cents = None # will be provided by subclasses, but not by Coin itself
@@ -227,6 +249,10 @@ class Coin:
 
     def worth(self) -> int:
         "*** YOUR CODE HERE ***"
+        age=Mint.present_year-self.year
+        if age>50:
+            return self.cents+(age-50)
+        return self.cents
 
 class Nickel(Coin):
     cents = 5
@@ -257,11 +283,13 @@ class VirFib():
     VirFib object, value 8
     """
 
-    def __init__(self, value: int = 0):
+    def __init__(self, value: int = 0,next_value :int =1):
         self.value = value
-
+        self.next_value=next_value
     def next(self):
         "*** YOUR CODE HERE ***"
+
+        return VirFib(self.next_value,self.value+self.next_value)
 
     def __repr__(self) -> str:
         return "VirFib object, value " + str(self.value)

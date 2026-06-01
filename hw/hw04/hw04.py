@@ -13,7 +13,12 @@ def shuffle(s):
     """
     assert len(s) % 2 == 0, 'len(seq) must be even'
     "*** YOUR CODE HERE ***"
-
+    d=[]
+    for i in range(len(s)//2):
+        j=len(s)//2+i
+        d.append(s[i])
+        d.append(s[j])
+    return d
 
 def deep_map(f, s):
     """Replace all non-list elements x with f(x) in the nested list s.
@@ -38,6 +43,11 @@ def deep_map(f, s):
     True
     """
     "*** YOUR CODE HERE ***"
+    for i in range(len(s)):
+        if type(s[i])==list:
+            deep_map(f,s[i])
+        else:
+            s[i]=f(s[i])
 
 
 SOURCE_FILE = __file__
@@ -47,11 +57,14 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
+    return ['planet',mass]
 
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
+    return p[1]
+
 
 def is_planet(p):
     """Whether p is a planet."""
@@ -104,7 +117,20 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if is_planet(m):
+        return True
+    left_m=end(left(m))
+    right_m=end(right(m))
+    if is_planet(left_m):
+        left_balance=True
+    else:
+        left_balance=balanced(left_m)
+    if is_planet(right_m):
+        right_balance=True
+    else:
+        right_balance=balanced(right_m)
+    a_balance=total_mass(left_m)*length(left(m))==total_mass(right_m)*length(right(m))
+    return a_balance and left_balance and right_balance 
 
 def prune_leaves(t, vals):
     """Return a version of t with all leaves that have a label
@@ -131,7 +157,18 @@ def prune_leaves(t, vals):
       6
     """
     "*** YOUR CODE HERE ***"
-
+    if is_leaf(t) and label(t) in vals:
+        return None
+    
+    # 递归修剪所有的子树，把没被剪光的子树（即不是None的）留下来
+    new_branches = []
+    for b in branches(t):
+        pruned_b = prune_leaves(b, vals)
+        if pruned_b is not None:
+            new_branches.append(pruned_b)
+            
+    # 返回修剪后组成的新树
+    return tree(label(t), new_branches)
 
 SOURCE_FILE = __file__
 
@@ -146,6 +183,10 @@ def max_path_sum(t):
     17
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return label(t)
+    return label(t)+max([max_path_sum(t_max) for t_max in branches(t)])
+#这里的max内部发生了什么还是不会
 
 
 def mobile(left, right):

@@ -1,7 +1,7 @@
 
 #cs61a学习记录
 
-目前写完lab05,hw03,projects cat
+目前写完lab06,hw04,projects cat
 
 
 def a(b=0):

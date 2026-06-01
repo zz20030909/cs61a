@@ -47,3 +47,43 @@ def balanced(t):
     
     return all_sums_equal and all_branches_balanced
 这是lab05，最后一题
+def prune_leaves(t, vals):
+    """Return a version of t with all leaves that have a label
+    that appears in vals removed.  Return None if the entire tree is
+    pruned away.
+
+    >>> t = tree(2)
+    >>> print(prune_leaves(t, (1, 2)))
+    None
+    >>> numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    >>> print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    >>> print_tree(prune_leaves(numbers, (3, 4, 6, 7)))
+    1
+      2
+      3
+        5
+      6
+    """
+    "*** YOUR CODE HERE ***"
+    if is_leaf(t) and label(t) in vals:
+        return None
+    
+    # 递归修剪所有的子树，把没被剪光的子树（即不是None的）留下来
+    new_branches = []
+    for b in branches(t):
+        pruned_b = prune_leaves(b, vals)
+        if pruned_b is not None:
+            new_branches.append(pruned_b)
+            
+    # 返回修剪后组成的新树
+    return tree(label(t), new_branches)
+
+SOURCE_FILE = __file__
+这是hw04,树看不懂了

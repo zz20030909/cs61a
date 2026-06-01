@@ -1,0 +1,8 @@
+'shuffle-correct', (0, 66)
+'deep_map-correct', (512, 66)
+'balanced-correct', (1024, 66)
+'prune_leaves-correct', (1536, 66)
+'max_path_sum-correct', (2048, 66)
+'mobile-correct', (2560, 66)
+'left-correct', (3072, 66)
+'total_mass-correct', (3584, 66)
